@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-const emprestimosFile = "./data/emprestimos.txt" // Nome do arquivo de texto para armazenar os dados das disciplinas
+const emprestimosFile = "./src/data/emprestimos.txt" // Nome do arquivo de texto para armazenar os dados das disciplinas
 
 type Emprestimo struct {
 	codigo  int
