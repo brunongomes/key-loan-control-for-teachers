@@ -116,6 +116,14 @@ func main() {
 			emprestimos.ListarEmprestimos()
 
 		case 11:
+			fmt.Println("Digite o código da disciplina a ser excluída:")
+			var codigo string
+			fmt.Scanln(&codigo)
+
+			err := emprestimos.ExcluirEmprestimos(codigo)
+			if err != nil {
+				log.Println("Erro ao excluir disciplina:", err)
+			}
 
 		case 12:
 
