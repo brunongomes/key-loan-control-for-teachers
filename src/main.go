@@ -32,7 +32,6 @@ func main() {
  
  		switch opcao {
  		case 1:
- 			// Solicitar dados da disciplina
  			fmt.Println("Digite o código da disciplina:")
  			var codigo string
  			fmt.Scanln(&codigo)
@@ -43,23 +42,19 @@ func main() {
  			var cargaHoraria int
  			fmt.Scanln(&cargaHoraria)
  
- 			// Chamar a função cadastrarDisciplina para cadastrar a disciplina
  			err := disciplinas.CadastrarDisciplina(codigo, nome, cargaHoraria)
  			if err != nil {
  				log.Println("Erro ao cadastrar disciplina:", err)
  			}
  
  		case 2:
- 			// Chamar a função listarDisciplinas para listar as disciplinas cadastradas
  			disciplinas.ListarDisciplinas()
  
  		case 3:
- 			// Solicitar código da disciplina a ser excluída
  			fmt.Println("Digite o código da disciplina a ser excluída:")
  			var codigo string
  			fmt.Scanln(&codigo)
  
- 			// Chamar a função excluirDisciplina para excluir a disciplina
  			err := disciplinas.ExcluirDisciplina(codigo)
  			if err != nil {
  				log.Println("Erro ao excluir disciplina:", err)
@@ -68,7 +63,6 @@ func main() {
 		case 4:
 
 		case 5:
-			// Solicitar dados do professor
 			fmt.Println("Digite o nome do professor:") 
 			var cpfProfessor string
 			fmt.Scanln(&cpfProfessor)
@@ -76,7 +70,6 @@ func main() {
 			var nomeProfessor string
 			fmt.Scanln(&nomeProfessor)
 			
-			// Chamar a função cadastrarDisciplina para cadastrar a disciplina
 			err := professores.CadastrarProfessor(cpfProfessor, nomeProfessor)
 			if err != nil {
 				log.Println("Erro ao cadastrar professor:", err)
@@ -86,12 +79,10 @@ func main() {
 			professores.ListarProfessores()
 
 		case 7:
-			// Solicitar código da disciplina a ser excluída
 			fmt.Println("Digite o cpf do professor para exclusão:") 
 			var cpfProfessor string
 			fmt.Scanln(&cpfProfessor)
 
-			// Chamar a função excluirDisciplina para excluir o professor
 			err := professores.ExcluirProfessor(cpfProfessor) 
 			if err != nil {
 			 log.Println("Erro ao excluir professor:", err)
@@ -100,7 +91,6 @@ func main() {
 		case 8:
 
 		case 9:
-			// Solicitar dados do emprestimo
 			fmt.Println("Digite o codigo do empréstimo") 
 			var codigo int
 			fmt.Scanln(&codigo)
@@ -117,7 +107,6 @@ func main() {
 			var horarioFim int
 			fmt.Scanln(&horarioFim)
 			
-			// Chamar a função cadastrarDisciplina para cadastrar a disciplina
 			err := emprestimos.CadastrarEmprestimo(codigo, cpfProfessor, nomeProfessor, horarioInicio, horarioFim)
 			if err != nil {
 				log.Println("Erro ao cadastrar professor:", err)
@@ -131,7 +120,6 @@ func main() {
 		case 12:
 
  		case 0:
- 			// Encerrar o programa
  			fmt.Println("Encerrando o programa...")
  			return
  
