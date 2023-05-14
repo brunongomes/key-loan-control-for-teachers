@@ -61,6 +61,14 @@ func main() {
  			}
 		
 		case 4:
+			fmt.Println("Digite o código da disciplina que será atualizada:")
+ 			var codigo string
+ 			fmt.Scanln(&codigo)
+
+			err := disciplinas.AtualizarDisciplina(codigo)
+			if err != nil {
+				log.Println("Erro ao atualizar disciplina:", err)
+			}
 
 		case 5:
 			fmt.Println("Digite o nome do professor:") 

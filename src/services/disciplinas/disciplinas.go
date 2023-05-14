@@ -116,3 +116,73 @@ func ExcluirDisciplina(codigo string) error {
     fmt.Println("Disciplina excluída com sucesso!")
     return nil
 }
+
+func AtualizarDisciplina(codigo string) error {
+    // Abrir o arquivo em modo de leitura
+    file, err := os.Open(disciplinasFile)
+    if err != nil {
+        return err
+    }
+    defer file.Close()
+
+    var disciplinas []Disciplina
+    scanner := bufio.NewScanner(file)
+    for scanner.Scan() {
+        linha := scanner.Text()
+        dados := strings.Split(linha, ",")
+        codigo := dados[0]
+        nome := dados[1]
+        cargaHoraria, _ := strconv.Atoi(dados[2])
+        disciplina := Disciplina{
+            Codigo:       codigo,
+            Nome:         nome,
+            CargaHoraria: cargaHoraria,
+        }
+        disciplinas = append(disciplinas, disciplina)
+    }
+
+    // Procurar a disciplina pelo código
+    index := -1
+    for i, disciplina := range disciplinas {
+        if disciplina.Codigo == codigo {
+            index = i
+            break
+        }
+    }
+
+    if index == -1 {
+        return fmt.Errorf("Código %s não encontrado. Digite um código válido.", codigo)
+    }
+
+    // Pedir os novos dados da disciplina
+    reader := bufio.NewReader(os.Stdin)
+    fmt.Print("Digite o novo nome da disciplina: ")
+    nome, _ := reader.ReadString('\n')
+    nome = strings.TrimSpace(nome)
+    fmt.Print("Digite a nova carga horária da disciplina: ")
+    cargaHorariaStr, _ := reader.ReadString('\n')
+    cargaHorariaStr = strings.TrimSpace(cargaHorariaStr)
+    cargaHoraria, _ := strconv.Atoi(cargaHorariaStr)
+
+    // Atualizar os dados da disciplina na lista
+    disciplinas[index].Nome = nome
+    disciplinas[index].CargaHoraria = cargaHoraria
+
+    // Abrir o arquivo em modo de escrita para reescrever os dados
+    file, err = os.OpenFile(disciplinasFile, os.O_TRUNC|os.O_WRONLY, 0644)
+    if err != nil {
+        return err
+    }
+    defer file.Close()
+
+    // Escrever os dados atualizados das disciplinas no arquivo
+    for _, disciplina := range disciplinas {
+        _, err = fmt.Fprintf(file, "%s,%s,%d\n", disciplina.Codigo, disciplina.Nome, disciplina.CargaHoraria)
+        if err != nil {
+            return err
+        }
+    }
+
+    fmt.Println("Disciplina atualizada com sucesso!")
+    return nil
+}
