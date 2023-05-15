@@ -41,7 +41,6 @@ func main() {
  			fmt.Println("Digite a carga horária da disciplina:")
  			var cargaHoraria int
  			fmt.Scanln(&cargaHoraria)
- 
  			err := disciplinas.CadastrarDisciplina(codigo, nome, cargaHoraria)
  			if err != nil {
  				log.Println("Erro ao cadastrar disciplina:", err)
@@ -54,7 +53,6 @@ func main() {
  			fmt.Println("Digite o código da disciplina a ser excluída:")
  			var codigo string
  			fmt.Scanln(&codigo)
- 
  			err := disciplinas.ExcluirDisciplina(codigo)
  			if err != nil {
  				log.Println("Erro ao excluir disciplina:", err)
@@ -64,7 +62,6 @@ func main() {
 			fmt.Println("Digite o código da disciplina que será atualizada:")
  			var codigo string
  			fmt.Scanln(&codigo)
-
 			err := disciplinas.AtualizarDisciplina(codigo)
 			if err != nil {
 				log.Println("Erro ao atualizar disciplina:", err)
@@ -77,7 +74,6 @@ func main() {
 			fmt.Println("Digite o nome do professor:")
 			var nomeProfessor string
 			fmt.Scanln(&nomeProfessor)
-			
 			err := professores.CadastrarProfessor(cpfProfessor, nomeProfessor)
 			if err != nil {
 				log.Println("Erro ao cadastrar professor:", err)
@@ -90,7 +86,6 @@ func main() {
 			fmt.Println("Digite o cpf do professor para exclusão:") 
 			var cpfProfessor string
 			fmt.Scanln(&cpfProfessor)
-
 			err := professores.ExcluirProfessor(cpfProfessor) 
 			if err != nil {
 			 log.Println("Erro ao excluir professor:", err)
@@ -100,7 +95,6 @@ func main() {
 			fmt.Println("Digite o cpf do professor que será atualizado:")
  			var cpf string
  			fmt.Scanln(&cpf)
-
 			err := professores.AtualizarProfessor(cpf)
 			if err != nil {
 				log.Println("Erro ao atualizar disciplina:", err)
@@ -122,7 +116,6 @@ func main() {
 			fmt.Println("Digite o horario que o professor devolveu a chave:")
 			var horarioFim int
 			fmt.Scanln(&horarioFim)
-			
 			err := emprestimos.CadastrarEmprestimo(codigo, cpfProfessor, nomeProfessor, horarioInicio, horarioFim)
 			if err != nil {
 				log.Println("Erro ao cadastrar professor:", err)
@@ -135,13 +128,19 @@ func main() {
 			fmt.Println("Digite o código da disciplina a ser excluída:")
 			var codigo string
 			fmt.Scanln(&codigo)
-
 			err := emprestimos.ExcluirEmprestimos(codigo)
 			if err != nil {
 				log.Println("Erro ao excluir disciplina:", err)
 			}
 
 		case 12:
+			fmt.Println("Digite o codigo do empréstimo que será atualizado:")
+ 			var codigo int
+ 			fmt.Scanln(&codigo)
+			err := emprestimos.AtualizarEmprestimo(codigo)
+			if err != nil {
+				log.Println("Erro ao atualizar disciplina:", err)
+			}
 
  		case 0:
  			fmt.Println("Encerrando o programa...")

@@ -134,3 +134,75 @@ func ExcluirEmprestimos(codigo string) error {
     fmt.Println("Empréstimo excluído com sucesso!")
     return nil
 }
+
+func AtualizarEmprestimo(codigo int) error {
+    // Abrir o arquivo em modo leitura
+    file, err := os.OpenFile(emprestimosFile, os.O_RDWR, 0644)
+    if err != nil {
+        return err
+    }
+    defer file.Close()
+
+    // Ler o conteúdo do arquivo
+    scanner := bufio.NewScanner(file)
+    emprestimos := []Emprestimo{}
+    for scanner.Scan() {
+        emprestimoStr := scanner.Text()
+        emprestimoArr := strings.Split(emprestimoStr, ",")
+        emprestimoCodigo, _ := strconv.Atoi(emprestimoArr[0])
+        if emprestimoCodigo == codigo {
+            // Solicitar novos dados do empréstimo
+            fmt.Println("Digite o CPF do professor:")
+            var novoCPF string
+ 			fmt.Scanln(&novoCPF)
+            fmt.Println("Digite o nome do professor:")
+            var novoNome string
+ 			fmt.Scanln(&novoNome)
+            fmt.Println("Digite o horário de início:")
+            var novoInicio int
+ 			fmt.Scanln(&novoInicio)
+            fmt.Println("Digite o horário de fim:")
+            var novoFim int
+ 			fmt.Scanln(&novoFim)
+
+            // Atualizar o empréstimo
+            emprestimo := Emprestimo{
+                codigo:         codigo,
+                CPF_Professor:  novoCPF,
+                Nome_Professor: novoNome,
+                Horario_inicio: novoInicio,
+                Horario_fim:    novoFim,
+            }
+            emprestimoStr := fmt.Sprintf("%d,%s,%s,%d,%d\n", emprestimo.codigo, emprestimo.CPF_Professor, emprestimo.Nome_Professor, emprestimo.Horario_inicio, emprestimo.Horario_fim)
+            _, err = file.WriteString(emprestimoStr)
+            if err != nil {
+                return err
+            }
+            fmt.Println("Empréstimo atualizado com sucesso!")
+            return nil
+        }
+
+        Horario_inicio, err := strconv.Atoi(emprestimoArr[3])
+        if err != nil {
+            return err
+        }
+
+        Horario_fim, err := strconv.Atoi(emprestimoArr[3])
+        if err != nil {
+            return err
+        }
+
+        emprestimo := Emprestimo{
+            codigo:         emprestimoCodigo,
+            CPF_Professor:  emprestimoArr[1],
+            Nome_Professor: emprestimoArr[2],
+            Horario_inicio: Horario_inicio,
+            Horario_fim:    Horario_fim,
+        }
+        emprestimos = append(emprestimos, emprestimo)
+    }
+
+    // Caso não encontre o empréstimo, informar o usuário
+    fmt.Println("Empréstimo não encontrado!")
+    return nil
+}
