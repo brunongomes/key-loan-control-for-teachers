@@ -111,3 +111,64 @@ func ExcluirProfessor(cpf string) error {
     fmt.Println("Professor excluído com sucesso!")
     return nil
 }
+
+
+func AtualizarProfessor(cpf string) error {
+	// Abrir o arquivo em modo de leitura
+	file, err := os.Open(professoresFile)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// Ler as linhas do arquivo e armazenar os dados dos professores em um slice
+	professores := []Professor{}
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		data := strings.Split(scanner.Text(), ",")
+		professor := Professor{
+			CPF:  data[0],
+			Nome: data[1],
+		}
+		professores = append(professores, professor)
+	}
+
+	// Encontrar o professor a ser atualizado
+	indice := -1
+	for i, p := range professores {
+		if p.CPF == cpf {
+			indice = i
+			break
+		}
+	}
+
+	if indice == -1 {
+		return fmt.Errorf("CPF não encontrado. Digite um CPF correto.")
+	}
+
+	// Pedir novos dados do professor
+	var nome string
+	fmt.Print("Digite o novo nome do professor: ")
+	fmt.Scanln(&nome)
+
+	// Atualizar o nome do professor
+	professores[indice].Nome = nome
+
+	// Abrir o arquivo em modo de escrita, cria se não existir
+	file, err = os.OpenFile(professoresFile, os.O_TRUNC|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// Escrever os dados dos professores atualizados no arquivo
+	for _, p := range professores {
+		_, err = fmt.Fprintf(file, "%s,%s\n", p.CPF, p.Nome)
+		if err != nil {
+			return err
+		}
+	}
+
+	fmt.Println("Professor atualizado com sucesso!")
+	return nil
+}

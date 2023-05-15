@@ -71,10 +71,10 @@ func main() {
 			}
 
 		case 5:
-			fmt.Println("Digite o nome do professor:") 
+			fmt.Println("Digite o CPF do professor:") 
 			var cpfProfessor string
 			fmt.Scanln(&cpfProfessor)
-			fmt.Println("Digite o CPF do professor:")
+			fmt.Println("Digite o nome do professor:")
 			var nomeProfessor string
 			fmt.Scanln(&nomeProfessor)
 			
@@ -97,6 +97,14 @@ func main() {
 			}
 
 		case 8:
+			fmt.Println("Digite o cpf do professor que será atualizado:")
+ 			var cpf string
+ 			fmt.Scanln(&cpf)
+
+			err := professores.AtualizarProfessor(cpf)
+			if err != nil {
+				log.Println("Erro ao atualizar disciplina:", err)
+			}
 
 		case 9:
 			fmt.Println("Digite o codigo do empréstimo") 
