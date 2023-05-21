@@ -13,6 +13,12 @@ O presente sistema tem como finalidade realizar o cadastro, visualização, atua
 go run src/main.go
 ```
 
+## Gerar executável
+Essa opção gera um executável para que o sistema seja executado em qualquer sistema operacional
+
+```
+go build -o sistema.exe ./src/main.go
+```
 
 # About the Key Loan Management System for Teachers 📝
 This system aims to perform the registration, viewing, updating, and deletion of teachers, subjects, and loans.
@@ -24,4 +30,10 @@ This system aims to perform the registration, viewing, updating, and deletion of
 
 ```
 go run src/main.go
+```
+
+Generate Executable
+This option generates an executable file so that the system can be run on any operating system.
+```
+go build -o system.exe ./src/main.go
 ```
