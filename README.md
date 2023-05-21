@@ -18,7 +18,7 @@ go run src/main.go
 This system aims to perform the registration, viewing, updating, and deletion of teachers, subjects, and loans.
 
 ## Requirements ✅
-Install GO on your machine
+[Install GO on your machine](https://go.dev/dl/)
 
 ## Getting Started 🚀
 
