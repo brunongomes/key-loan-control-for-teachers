@@ -8,7 +8,7 @@ import (
     "strings"  // Pacote para manipulação de strings, como separação em substrings por um separador
 )
 
-const professoresFile = "./src/data/professores.txt" // Nome do arquivo de texto para armazenar os dados dos professores
+const professoresFile = "./data/professores.txt" // Nome do arquivo de texto para armazenar os dados dos professores
 
 type Professor struct {
     CPF  string

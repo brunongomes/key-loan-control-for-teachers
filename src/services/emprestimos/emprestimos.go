@@ -8,7 +8,7 @@ import (
     "strconv"
 )
 
-const emprestimosFile = "./src/data/emprestimos.txt"
+const emprestimosFile = "./data/emprestimos.txt"
 
 type Emprestimo struct {
 	codigo  int

@@ -8,7 +8,7 @@ import (
     "strings"  // Pacote para manipulação de strings, como separação em substrings por um separador
 )
 
-const disciplinasFile = "./src/data/disciplinas.txt" // Nome do arquivo de texto para armazenar os dados das disciplinas
+const disciplinasFile = "./data/disciplinas.txt" // Nome do arquivo de texto para armazenar os dados das disciplinas
 
 type Disciplina struct {
     Codigo       string
