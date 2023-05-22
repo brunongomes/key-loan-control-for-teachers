@@ -3,12 +3,18 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"./services/disciplinas"
 	"./services/professores"
 	"./services/emprestimos"
 )
 
 func main() {
+	err := checkAndCreateDirectory()
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	fmt.Println("Controle de empréstimo de chaves")
  	for {
  		// Exibir menu de opções
@@ -150,4 +156,23 @@ func main() {
  			fmt.Println("Opção inválida, tente novamente. \n")
  		}
  	}
+}
+
+func checkAndCreateDirectory() error {
+	dir := "./data"
+
+	// Verifica se o diretório já existe
+	_, err := os.Stat(dir)
+	if os.IsNotExist(err) {
+		// Cria o diretório
+		err := os.Mkdir(dir, 0755)
+		if err != nil {
+			return fmt.Errorf("erro ao criar o diretório: %v", err)
+		}
+		fmt.Println("Diretório criado com sucesso!")
+	} else if err != nil {
+		return fmt.Errorf("erro ao verificar o diretório: %v", err)
+	}
+
+	return nil
 }
