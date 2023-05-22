@@ -14,10 +14,14 @@ go run src/main.go
 ```
 
 ## Gerar executável
-Essa opção gera um executável para que o sistema seja executado em qualquer sistema operacional
-
+Gerar um executável para que o sistema seja executado no linux.
 ```
 go build -o sistema.exe ./src/main.go
+```
+
+Gerar um executável para que o sistema seja executado no windows.
+```
+GOOS=windows go build -o sistema.exe ./src/main.go
 ```
 
 # About the Key Loan Management System for Teachers 📝
@@ -32,8 +36,13 @@ This system aims to perform the registration, viewing, updating, and deletion of
 go run src/main.go
 ```
 
-Generate Executable
-This option generates an executable file so that the system can be run on any operating system.
+## Generate Executable
+To generate an executable for the system to run on Linux.
 ```
 go build -o system.exe ./src/main.go
+```
+
+To generate an executable for the system to run on Windows.
+```
+GOOS=windows go build -o sistema.exe ./src/main.go
 ```
