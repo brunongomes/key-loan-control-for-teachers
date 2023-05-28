@@ -7,6 +7,7 @@ import (
 	"./services/disciplinas"
 	"./services/professores"
 	"./services/emprestimos"
+	"path/filepath"
 )
 
 func main() {
@@ -193,8 +194,20 @@ func checkAndCreateDirectory() error {
 			return fmt.Errorf("erro ao criar o diretório: %v", err)
 		}
 		fmt.Println("Diretório criado com sucesso!")
-	} else if err != nil {
-		return fmt.Errorf("erro ao verificar o diretório: %v", err)
+	}
+
+	// Cria os arquivos dentro do diretório
+	files := []string{"professores.txt", "emprestimos.txt", "disciplinas.txt"}
+	for _, file := range files {
+		filePath := filepath.Join(dir, file)
+		_, err := os.Stat(filePath)
+		if os.IsNotExist(err) {
+			_, err := os.Create(filePath)
+			if err != nil {
+				return fmt.Errorf("erro ao criar o arquivo %s: %v", file, err)
+			}
+			fmt.Printf("Arquivo %s criado com sucesso!\n", file)
+		}
 	}
 
 	return nil
