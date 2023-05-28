@@ -24,6 +24,7 @@ Gerar um executável para que o sistema seja executado no windows.
 GOOS=windows go build -o sistema.exe ./src/main.go
 ```
 
+
 # About the Key Loan Management System for Teachers 📝
 This system aims to perform the registration, viewing, updating, and deletion of teachers, subjects, and loans.
 
