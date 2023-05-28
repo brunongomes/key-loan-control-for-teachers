@@ -11,45 +11,88 @@ import (
 const emprestimosFile = "./data/emprestimos.txt"
 
 type Emprestimo struct {
-	codigo  int
+	codigo         int
 	CPF_Professor  string
 	Nome_Professor string
-	Horario_inicio int
-	Horario_fim int
+	Horario_inicio string
+	Horario_fim    string
 }
 
-
-func CadastrarEmprestimo(codigo int, CPF_Professor string, Nome_Professor string, Horario_inicio int, Horario_fim int) error {
-	emprestimo := Emprestimo {
-		codigo : codigo,
-		CPF_Professor : CPF_Professor,
-		Nome_Professor: Nome_Professor,
-		Horario_inicio: Horario_inicio,
-		Horario_fim: Horario_fim,
+func CadastrarEmprestimo(codigo int, CPF_Professor string, Nome_Professor string, Horario_inicio string, Horario_fim string) error {
+	emprestimo := Emprestimo{
+		codigo:          codigo,
+		CPF_Professor:   CPF_Professor,
+		Nome_Professor:  Nome_Professor,
 	}
 
-    // Abrir o arquivo em modo de escrita, cria se não existir
-    file, err := os.OpenFile(emprestimosFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-    if err != nil {
-        return err
-    }
-    defer file.Close()
+	// Solicitar e validar o horário de início
+	for {
+		if !validarHorario(Horario_inicio) {
+			fmt.Println("Horário de início inválido. Utilize o formato HH:MM: ")
+			fmt.Scanln(&Horario_inicio)
+		} else {
+			emprestimo.Horario_inicio = Horario_inicio
+			break
+		}
+	}
 
-    // Escrever os dados do professor no arquivo
-    _, err = fmt.Fprintf(file, "%d,%s,%s,%d,%d\n", emprestimo.codigo, emprestimo.CPF_Professor, emprestimo.Nome_Professor, emprestimo.Horario_inicio, emprestimo.Horario_fim)
-    if err != nil {
-        return err
-    }
+	// Solicitar e validar o horário de fim
+	for {
+		if !validarHorario(Horario_fim) {
+			fmt.Println("Horário de fim inválido. Utilize o formato HH:MM: ")
+			fmt.Scanln(&Horario_fim)
+		} else {
+			emprestimo.Horario_fim = Horario_fim
+			break
+		}
+	}
 
-    fmt.Println("Empréstimo cadastrado com sucesso!")
-    return nil
+	// Abrir o arquivo em modo de escrita, cria se não existir
+	file, err := os.OpenFile(emprestimosFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// Escrever os dados do professor no arquivo
+	_, err = fmt.Fprintf(file, "%d,%s,%s,%s,%s\n", emprestimo.codigo, emprestimo.CPF_Professor, emprestimo.Nome_Professor, emprestimo.Horario_inicio, emprestimo.Horario_fim)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Empréstimo cadastrado com sucesso!")
+	return nil
+}
+
+// Função auxiliar para validar o formato do horário (HH:MM)
+func validarHorario(horario string) bool {
+	parts := strings.Split(horario, ":")
+	if len(parts) != 2 {
+		return false
+	}
+
+	hour, err := strconv.Atoi(parts[0])
+	if err != nil {
+		return false
+	}
+
+	minute, err := strconv.Atoi(parts[1])
+	if err != nil {
+		return false
+	}
+
+	if hour < 0 || hour > 23 || minute < 0 || minute > 59 {
+		return false
+	}
+
+	return true
 }
 
 func ListarEmprestimos() {
     // Abrir o arquivo em modo de leitura
     file, err := os.Open(emprestimosFile)
     if err != nil {
-        fmt.Println("Erro ao abrir o arquivo de professores:", err)
+        fmt.Println("Erro ao abrir o arquivo de empréstimos:", err)
         return
     }
     defer file.Close()
@@ -88,8 +131,8 @@ func ExcluirEmprestimos(codigo string) error {
         codigo := dados[0]
         CPF_Professor := dados[1]
         Nome_Professor := dados[2]
-        Horario_inicio, _ := strconv.Atoi(dados[3])
-        Horario_fim, _ := strconv.Atoi(dados[4])
+        Horario_inicio := dados[3]
+        Horario_fim := dados[4]
         codigoInt, err := strconv.Atoi(codigo)
         if err != nil {
             return err
@@ -125,7 +168,7 @@ func ExcluirEmprestimos(codigo string) error {
 
     // Escrever os dados atualizados das disciplinas no arquivo
     for _, emprestimo := range emprestimos {
-        _, err = fmt.Fprintf(file, "%s,%s,%s,%d,%d\n", emprestimo.codigo, emprestimo.CPF_Professor, emprestimo.Nome_Professor, emprestimo.Horario_inicio, emprestimo.Horario_fim)
+        _, err = fmt.Fprintf(file, "%d,%s,%s,%s,%s\n", emprestimo.codigo, emprestimo.CPF_Professor, emprestimo.Nome_Professor, emprestimo.Horario_inicio, emprestimo.Horario_fim)
         if err != nil {
             return err
         }
@@ -154,16 +197,16 @@ func AtualizarEmprestimo(codigo int) error {
             // Solicitar novos dados do empréstimo
             fmt.Println("Digite o CPF do professor:")
             var novoCPF string
- 			fmt.Scanln(&novoCPF)
+            fmt.Scanln(&novoCPF)
             fmt.Println("Digite o nome do professor:")
             var novoNome string
- 			fmt.Scanln(&novoNome)
+            fmt.Scanln(&novoNome)
             fmt.Println("Digite o horário de início:")
-            var novoInicio int
- 			fmt.Scanln(&novoInicio)
+            var novoInicio string
+            fmt.Scanln(&novoInicio)
             fmt.Println("Digite o horário de fim:")
-            var novoFim int
- 			fmt.Scanln(&novoFim)
+            var novoFim string
+            fmt.Scanln(&novoFim)
 
             // Atualizar o empréstimo
             emprestimo := Emprestimo{
@@ -173,7 +216,7 @@ func AtualizarEmprestimo(codigo int) error {
                 Horario_inicio: novoInicio,
                 Horario_fim:    novoFim,
             }
-            emprestimoStr := fmt.Sprintf("%d,%s,%s,%d,%d\n", emprestimo.codigo, emprestimo.CPF_Professor, emprestimo.Nome_Professor, emprestimo.Horario_inicio, emprestimo.Horario_fim)
+            emprestimoStr := fmt.Sprintf("%d,%s,%s,%s,%s\n", emprestimo.codigo, emprestimo.CPF_Professor, emprestimo.Nome_Professor, emprestimo.Horario_inicio, emprestimo.Horario_fim)
             _, err = file.WriteString(emprestimoStr)
             if err != nil {
                 return err
@@ -182,22 +225,12 @@ func AtualizarEmprestimo(codigo int) error {
             return nil
         }
 
-        Horario_inicio, err := strconv.Atoi(emprestimoArr[3])
-        if err != nil {
-            return err
-        }
-
-        Horario_fim, err := strconv.Atoi(emprestimoArr[3])
-        if err != nil {
-            return err
-        }
-
         emprestimo := Emprestimo{
             codigo:         emprestimoCodigo,
             CPF_Professor:  emprestimoArr[1],
             Nome_Professor: emprestimoArr[2],
-            Horario_inicio: Horario_inicio,
-            Horario_fim:    Horario_fim,
+            Horario_inicio: emprestimoArr[3],
+            Horario_fim:    emprestimoArr[4],
         }
         emprestimos = append(emprestimos, emprestimo)
     }

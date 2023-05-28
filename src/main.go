@@ -116,11 +116,11 @@ func main() {
 			fmt.Println("Digite o nome do professor:")
 			var nomeProfessor string
 			fmt.Scanln(&nomeProfessor)
-			fmt.Println("Digite o horario que o professor pegou a chave:")
-			var horarioInicio int
+			fmt.Println("Digite o horario que o professor pegou a chave: (Utilize o formato HH:MM)")
+			var horarioInicio string
 			fmt.Scanln(&horarioInicio)
-			fmt.Println("Digite o horario que o professor devolveu a chave:")
-			var horarioFim int
+			fmt.Println("Digite o horario que o professor devolveu a chave: (Utilize o formato HH:MM)")
+			var horarioFim string
 			fmt.Scanln(&horarioFim)
 			err := emprestimos.CadastrarEmprestimo(codigo, cpfProfessor, nomeProfessor, horarioInicio, horarioFim)
 			if err != nil {
