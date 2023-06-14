@@ -7,6 +7,12 @@ O presente sistema tem como finalidade realizar o cadastro, visualização, atua
 [Instalar o GO na máquina](https://go.dev/dl/)
 
 
+## Dependências
+
+```
+go mod download
+```
+
 ## Iniciar 🚀 
 
 ```
