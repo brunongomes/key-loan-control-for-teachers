@@ -4,7 +4,9 @@ O presente sistema tem como finalidade realizar o cadastro, visualização, atua
 
 ## Requisitos ✅
 
-[Instalar o GO na máquina](https://go.dev/dl/)
+[Instalar o GO](https://go.dev/dl/)
+
+[Instalar o MongoDB](https://www.mongodb.com/cloud/atlas/lp/try4?utm_source=google&utm_campaign=search_gs_pl_evergreen_atlas_core_prosp-brand_gic-null_amers-br_ps-all_desktop_eng_lead&utm_term=mongodb&utm_medium=cpc_paid_search&utm_ad=e&utm_ad_campaign_id=12212624308&adgroup=115749706023&cq_cmp=12212624308&gad=1&gclid=CjwKCAjwkLCkBhA9EiwAka9QRl846vPE0kXkCtmekDxAserqSfHRGRIJsxsZv90fypc8tm658DIQVhoCsM0QAvD_BwE)
 
 
 ## Dependências
@@ -15,41 +17,13 @@ go mod download
 
 ## Iniciar 🚀 
 
-```
-go run src/main.go
-```
-
-## Gerar executável
-Gerar um executável para que o sistema seja executado no linux.
-```
-go build -o sistema.exe ./src/main.go
-```
-
-Gerar um executável para que o sistema seja executado no windows.
-```
-GOOS=windows go build -o sistema.exe ./src/main.go
-```
-
-
-# About the Key Loan Management System for Teachers 📝
-This system aims to perform the registration, viewing, updating, and deletion of teachers, subjects, and loans.
-
-## Requirements ✅
-[Install GO on your machine](https://go.dev/dl/)
-
-## Getting Started 🚀
+Backend 
 
 ```
-go run src/main.go
+go run src/router/router.go
 ```
 
-## Generate Executable
-To generate an executable for the system to run on Linux.
+Frontend
 ```
-go build -o system.exe ./src/main.go
-```
-
-To generate an executable for the system to run on Windows.
-```
-GOOS=windows go build -o sistema.exe ./src/main.go
+go run src/web/home.go
 ```
