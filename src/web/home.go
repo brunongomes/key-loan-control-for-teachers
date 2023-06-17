@@ -18,7 +18,10 @@ type Disciplina struct {
 }
 
 func main() {
+
 	router := mux.NewRouter()
+	// Roteamento para arquivos estáticos
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	router.HandleFunc("/", homeHandler).Methods("GET")
 	router.HandleFunc("/disciplinas", disciplinasHandler).Methods("GET")
@@ -36,6 +39,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 			<html>
 			<head>
 				<title>Home</title>
+				<link rel="stylesheet" href="/static/style.css">
 			</head>
 			<body>
 				<h1>Home</h1>
