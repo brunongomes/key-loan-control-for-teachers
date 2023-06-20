@@ -75,6 +75,10 @@ func disciplinasHandler(w http.ResponseWriter, r *http.Request) {
 				<input type="text" id="cargaHoraria" name="cargaHoraria"><br><br>
 				<input type="submit" value="Cadastrar">
 			</form>
+			<br>
+			<form action="/" method="GET">
+				<input type="submit" value="Voltar">
+			</form>
 		</body>
 		</html>
 			`
@@ -106,6 +110,10 @@ func emprestimosHandler(w http.ResponseWriter, r *http.Request) {
 				<input type="text" id="horarioFim" name="horarioFim"><br><br>
 				<input type="submit" value="Cadastrar">
 			</form>
+			<br>
+			<form action="/" method="GET">
+				<input type="submit" value="Voltar">
+			</form>
 		</body>
 		</html>
 			`
@@ -130,6 +138,10 @@ func professoresHandler(w http.ResponseWriter, r *http.Request) {
 				<label for="nome">Nome:</label><br>
 				<input type="text" id="nome" name="nome"><br><br>
 				<input type="submit" value="Cadastrar">
+			</form>
+			<br>
+			<form action="/" method="GET">
+				<input type="submit" value="Voltar">
 			</form>
 		</body>
 		</html>
