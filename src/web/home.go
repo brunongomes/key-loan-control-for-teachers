@@ -42,7 +42,8 @@ func main() {
 
 	router.HandleFunc("/", homeHandler).Methods("GET")
 	router.HandleFunc("/disciplinas", disciplinasHandler).Methods("GET")
-	router.HandleFunc("/visualizar-disciplinas", visualizarDisciplinasHandler).Methods("GET") // Nova rota para visualizar disciplinas
+	router.HandleFunc("/visualizar-disciplinas", visualizarDisciplinasHandler).Methods("GET") // Nova rota para visualizar disciplinas 
+	router.HandleFunc("/visualizar-professores", visualizarProfessoresHandler).Methods("GET") // Nova rota para visualizar disciplinas 
 	router.HandleFunc("/emprestimos", emprestimosHandler).Methods("GET")
 	router.HandleFunc("/professores", professoresHandler).Methods("GET")
 	router.HandleFunc("/disciplinas", cadastrarDisciplinaHandler).Methods("POST")
@@ -85,7 +86,7 @@ func disciplinasHandler(w http.ResponseWriter, r *http.Request) {
 			<title>Cadastrar Disciplina</title>
 			<link rel="stylesheet" href="/static/style.css">
 		</head>
-		<body>
+		<body class="container">
 			<h1>Cadastrar Disciplina</h1>
 			<div class="form-container">
 				<form action="/disciplinas" method="POST">
@@ -143,6 +144,10 @@ func emprestimosHandler(w http.ResponseWriter, r *http.Request) {
 				<form action="/" method="GET">
 					<input type="submit" value="Voltar">
 				</form>
+				<br>
+				<form action="/visualizar-emprestimos" method="GET">
+					<input type="submit" value="Visualizar">
+				</form>
 			</div>
 		</body>
 		</html>
@@ -174,6 +179,10 @@ func professoresHandler(w http.ResponseWriter, r *http.Request) {
 				<br>
 				<form action="/" method="GET">
 					<input type="submit" value="Voltar">
+				</form>
+				<br>
+				<form action="/visualizar-professores" method="GET">
+					<input type="submit" value="Visualizar">
 				</form>
 			</div>
 		</body>
@@ -379,6 +388,92 @@ func cadastrarProfessorHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
+
+type ProfessorResponse struct {
+	Data []Professor `json:"data"`
+}
+
+func visualizarProfessoresHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		// Fazer a solicitação HTTP GET para obter os dados dos professores do backend
+		resp, err := http.Get("http://localhost:8080/professores")
+		if err != nil {
+			http.Error(w, "Erro ao obter os dados dos professores", http.StatusInternalServerError)
+			log.Println("Erro ao obter os dados dos professores:", err)
+			return
+		}
+		defer resp.Body.Close()
+
+		// Ler a resposta do backend
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			http.Error(w, "Erro ao ler a resposta do backend", http.StatusInternalServerError)
+			log.Println("Erro ao ler a resposta do backend:", err)
+			return
+		}
+
+		// Processar os dados da resposta em formato JSON
+		var professorResponse ProfessorResponse
+		err = json.Unmarshal(body, &professorResponse)
+		if err != nil {
+			http.Error(w, "Erro ao processar os dados dos professores", http.StatusInternalServerError)
+			log.Println("Erro ao processar os dados dos professores:", err)
+			return
+		}
+
+		// Exibir a página de visualização dos professores
+		html := `
+		<!DOCTYPE html>
+		<html>
+		<head>
+			<title>Visualizar Professores</title>
+			<link rel="stylesheet" href="/static/style.css">
+		</head>
+		<body>
+			<h1>Visualizar Professores</h1>
+			<table class="form-tabela">
+				<thead>
+					<tr>
+						<th>CPF</th>
+						<th>Nome</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{range .Data}}
+					<tr>
+						<td>{{.CPF}}</td>
+						<td>{{.Nome}}</td>
+					</tr>
+					{{end}}
+				</tbody>
+			</table>
+			<br>
+			<form action="/" method="GET">
+				<input type="submit" value="Voltar">
+			</form>
+		</body>
+		</html>
+		`
+
+		// Renderizar o HTML substituindo os dados dos professores
+		tmpl, err := template.New("visualizar_professores").Parse(html)
+		if err != nil {
+			http.Error(w, "Erro ao renderizar o HTML", http.StatusInternalServerError)
+			log.Println("Erro ao renderizar o HTML:", err)
+			return
+		}
+
+		err = tmpl.Execute(w, professorResponse)
+		if err != nil {
+			http.Error(w, "Erro ao renderizar o HTML", http.StatusInternalServerError)
+			log.Println("Erro ao renderizar o HTML:", err)
+			return
+		}
+	}
+}
+
+
 
 func cadastrarEmprestimoHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
