@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"github.com/gorilla/mux"
 	"html/template"
+	
+	"io/ioutil"
 )
 
 type Disciplina struct {
@@ -81,6 +83,7 @@ func disciplinasHandler(w http.ResponseWriter, r *http.Request) {
 		<html>
 		<head>
 			<title>Cadastrar Disciplina</title>
+			<link rel="stylesheet" href="/static/style.css">
 		</head>
 		<body>
 			<h1>Cadastrar Disciplina</h1>
@@ -97,6 +100,10 @@ func disciplinasHandler(w http.ResponseWriter, r *http.Request) {
 			<form action="/" method="GET">
 				<input type="submit" value="Voltar">
 			</form>
+			<br>
+			<form action="/visualizar-disciplinas" method="GET">
+				<input type="submit" value="Visualizar">
+			</form>
 		</body>
 		</html>
 			`
@@ -112,10 +119,11 @@ func emprestimosHandler(w http.ResponseWriter, r *http.Request) {
 		<html>
 		<head>
 			<title>Cadastrar Disciplina</title>
+			<link rel="stylesheet" href="/static/style.css">
 		</head>
 		<body>
 			<h1>Cadastrar Empréstimos</h1>
-			<form action="/" method="POST">
+			<form action="/emprestimos" method="POST">
 				<label for="codigo">Código:</label><br>
 				<input type="text" id="codigo" name="codigo"><br><br>
 				<label for="cpfProfessor">CPF do professor:</label><br>
@@ -147,10 +155,11 @@ func professoresHandler(w http.ResponseWriter, r *http.Request) {
 		<html>
 		<head>
 			<title>Cadastrar Professor</title>
+			<link rel="stylesheet" href="/static/style.css">
 		</head>
 		<body>
 			<h1>Cadastrar Professor</h1>
-			<form action="/" method="POST">
+			<form action="/professores" method="POST">
 				<label for="cpf">CPF:</label><br>
 				<input type="text" id="cpf" name="cpf"><br><br>
 				<label for="nome">Nome:</label><br>
@@ -224,11 +233,42 @@ func cadastrarDisciplinaHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+type DisciplinaData struct {
+	Key   string `json:"Key"`
+	Value interface{} `json:"Value"`
+}
+
+type DisciplinaResponse [][]DisciplinaData
+
 func visualizarDisciplinasHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		// Obtenha as disciplinas do banco de dados (substitua esta parte com a lógica de obtenção dos dados do banco)
+		// Fazer a solicitação HTTP GET para obter os dados das disciplinas do backend
+		resp, err := http.Get("http://localhost:8080/disciplinas")
+		if err != nil {
+			http.Error(w, "Erro ao obter os dados das disciplinas", http.StatusInternalServerError)
+			log.Println("Erro ao obter os dados das disciplinas:", err)
+			return
+		}
+		defer resp.Body.Close()
 
-		// Exiba a página de visualização das disciplinas
+		// Ler a resposta do backend
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			http.Error(w, "Erro ao ler a resposta do backend", http.StatusInternalServerError)
+			log.Println("Erro ao ler a resposta do backend:", err)
+			return
+		}
+
+		// Processar os dados da resposta em formato JSON
+		var disciplinas DisciplinaResponse
+		err = json.Unmarshal(body, &disciplinas)
+		if err != nil {
+			http.Error(w, "Erro ao processar os dados das disciplinas", http.StatusInternalServerError)
+			log.Println("Erro ao processar os dados das disciplinas:", err)
+			return
+		}
+
+		// Exibir a página de visualização das disciplinas
 		html := `
 		<!DOCTYPE html>
 		<html>
@@ -250,46 +290,40 @@ func visualizarDisciplinasHandler(w http.ResponseWriter, r *http.Request) {
 				<tbody>
 					{{range .}}
 					<tr>
-						<td>{{.Codigo}}</td>
-						<td>{{.Nome}}</td>
-						<td>{{.CargaHoraria}}</td>
-						<td><a href="/atualizar-disciplina?codigo={{.Codigo}}">Atualizar</a></td>
-						<td><a href="/deletar-disciplina?codigo={{.Codigo}}">Deletar</a></td>
+						<td>{{index . 1}}</td>
+						<td>{{index . 2}}</td>
+						<td>{{index . 3}}</td>
+						<td><a href="/atualizar-disciplina?codigo={{index . 1}}">Atualizar</a></td>
+						<td><a href="/deletar-disciplina?codigo={{index . 1}}">Deletar</a></td>
 					</tr>
 					{{end}}
 				</tbody>
 			</table>
 			<br>
-			<form action="/" method="GET">
+			<form action="/disciplinas" method="GET">
 				<input type="submit" value="Voltar">
 			</form>
 		</body>
 		</html>
 		`
 
-		// Substitua esta parte com a lógica para obter as disciplinas do banco
-		disciplinas := []Disciplina{
-			{Codigo: "D001", Nome: "Disciplina 1", CargaHoraria: 60},
-			{Codigo: "D002", Nome: "Disciplina 2", CargaHoraria: 80},
-			{Codigo: "D003", Nome: "Disciplina 3", CargaHoraria: 120},
-		}
-
-		// Renderize o HTML substituindo os dados das disciplinas
+		// Renderizar o HTML substituindo os dados das disciplinas
 		tmpl, err := template.New("visualizar_disciplinas").Parse(html)
 		if err != nil {
 			http.Error(w, "Erro ao renderizar o HTML", http.StatusInternalServerError)
-			log.Println("Erro ao renderizar o HTML:", err) // Adiciona um log de erro
+			log.Println("Erro ao renderizar o HTML:", err)
 			return
 		}
 
 		err = tmpl.Execute(w, disciplinas)
 		if err != nil {
 			http.Error(w, "Erro ao renderizar o HTML", http.StatusInternalServerError)
-			log.Println("Erro ao renderizar o HTML:", err) // Adiciona um log de erro
+			log.Println("Erro ao renderizar o HTML:", err)
 			return
 		}
 	}
 }
+
 
 
 func cadastrarProfessorHandler(w http.ResponseWriter, r *http.Request) {
