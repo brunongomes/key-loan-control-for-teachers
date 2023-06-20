@@ -61,13 +61,13 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 				<title>Home</title>
 				<link rel="stylesheet" href="/static/style.css">
 			</head>
-			<body>
+			<body class="container">
 				<h1>Home</h1>
-				<ul>
-					<li><a href="/disciplinas">Disciplinas</a></li>
-					<li><a href="/emprestimos">Empréstimos</a></li>
-					<li><a href="/professores">Professores</a></li>
-				</ul>
+				<div class="container">
+  				<a href="/disciplinas" class="button">Disciplinas</a>
+  				<a href="/emprestimos" class="button">Empréstimos</a>
+  				<a href="/professores" class="button">Professores</a>
+				</div>
 			</body>
 			</html>
 			`
@@ -87,23 +87,25 @@ func disciplinasHandler(w http.ResponseWriter, r *http.Request) {
 		</head>
 		<body>
 			<h1>Cadastrar Disciplina</h1>
-			<form action="/disciplinas" method="POST">
-				<label for="codigo">Código:</label><br>
-				<input type="text" id="codigo" name="codigo"><br><br>
-				<label for="nome">Nome:</label><br>
-				<input type="text" id="nome" name="nome"><br><br>
-				<label for="cargaHoraria">Carga Horária:</label><br>
-				<input type="text" id="cargaHoraria" name="cargaHoraria"><br><br>
-				<input type="submit" value="Cadastrar">
-			</form>
-			<br>
-			<form action="/" method="GET">
-				<input type="submit" value="Voltar">
-			</form>
-			<br>
-			<form action="/visualizar-disciplinas" method="GET">
-				<input type="submit" value="Visualizar">
-			</form>
+			<div class="form-container">
+				<form action="/disciplinas" method="POST">
+					<label for="codigo">Código:</label><br>
+					<input type="text" id="codigo" name="codigo"><br><br>
+					<label for="nome">Nome:</label><br>
+					<input type="text" id="nome" name="nome"><br><br>
+					<label for="cargaHoraria">Carga Horária:</label><br>
+					<input type="text" id="cargaHoraria" name="cargaHoraria"><br><br>
+					<input type="submit" value="Cadastrar">
+				</form>
+				<br>
+				<form action="/" method="GET">
+					<input type="submit" value="Voltar">
+				</form>
+				<br>
+				<form action="/visualizar-disciplinas" method="GET">
+					<input type="submit" value="Visualizar">
+				</form>
+			</div>
 		</body>
 		</html>
 			`
@@ -123,23 +125,25 @@ func emprestimosHandler(w http.ResponseWriter, r *http.Request) {
 		</head>
 		<body>
 			<h1>Cadastrar Empréstimos</h1>
-			<form action="/emprestimos" method="POST">
-				<label for="codigo">Código:</label><br>
-				<input type="text" id="codigo" name="codigo"><br><br>
-				<label for="cpfProfessor">CPF do professor:</label><br>
-				<input type="text" id="cpfProfessor" name="cpfProfessor"><br><br>
-				<label for="nomeProfessor">Nome do professor:</label><br>
-				<input type="text" id="nomeProfessor" name="nomeProfessor"><br><br>
-				<label for="horarioInicio">Horário início:</label><br>
-				<input type="text" id="horarioInicio" name="horarioInicio"><br><br>
-				<label for="horarioFim">Horário início:</label><br>
-				<input type="text" id="horarioFim" name="horarioFim"><br><br>
-				<input type="submit" value="Cadastrar">
-			</form>
-			<br>
-			<form action="/" method="GET">
-				<input type="submit" value="Voltar">
-			</form>
+			<div class="form-container">
+				<form action="/emprestimos" method="POST">
+					<label for="codigo">Código:</label><br>
+					<input type="text" id="codigo" name="codigo"><br><br>
+					<label for="cpfProfessor">CPF do professor:</label><br>
+					<input type="text" id="cpfProfessor" name="cpfProfessor"><br><br>
+					<label for="nomeProfessor">Nome do professor:</label><br>
+					<input type="text" id="nomeProfessor" name="nomeProfessor"><br><br>
+					<label for="horarioInicio">Horário início:</label><br>
+					<input type="text" id="horarioInicio" name="horarioInicio"><br><br>
+					<label for="horarioFim">Horário início:</label><br>
+					<input type="text" id="horarioFim" name="horarioFim"><br><br>
+					<input type="submit" value="Cadastrar">
+				</form>
+				<br>
+				<form action="/" method="GET">
+					<input type="submit" value="Voltar">
+				</form>
+			</div>
 		</body>
 		</html>
 			`
@@ -159,17 +163,19 @@ func professoresHandler(w http.ResponseWriter, r *http.Request) {
 		</head>
 		<body>
 			<h1>Cadastrar Professor</h1>
-			<form action="/professores" method="POST">
-				<label for="cpf">CPF:</label><br>
-				<input type="text" id="cpf" name="cpf"><br><br>
-				<label for="nome">Nome:</label><br>
-				<input type="text" id="nome" name="nome"><br><br>
-				<input type="submit" value="Cadastrar">
-			</form>
-			<br>
-			<form action="/" method="GET">
-				<input type="submit" value="Voltar">
-			</form>
+			<div class="form-container">
+				<form action="/professores" method="POST">
+					<label for="cpf">CPF:</label><br>
+					<input type="text" id="cpf" name="cpf"><br><br>
+					<label for="nome">Nome:</label><br>
+					<input type="text" id="nome" name="nome"><br><br>
+					<input type="submit" value="Cadastrar">
+				</form>
+				<br>
+				<form action="/" method="GET">
+					<input type="submit" value="Voltar">
+				</form>
+			</div>
 		</body>
 		</html>
 			`
@@ -274,10 +280,11 @@ func visualizarDisciplinasHandler(w http.ResponseWriter, r *http.Request) {
 		<html>
 		<head>
 			<title>Visualizar Disciplinas</title>
+			<link rel="stylesheet" href="/static/style.css">
 		</head>
 		<body>
 			<h1>Visualizar Disciplinas</h1>
-			<table>
+			<table class="form-tabela">
 				<thead>
 					<tr>
 						<th>Código</th>
