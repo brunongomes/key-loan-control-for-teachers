@@ -14,7 +14,7 @@ type MongoDB struct {
 }
 
 func ConnectToMongoDB() (*MongoDB, error) {
-	clientOptions := options.Client().ApplyURI("mongodb://root:12345@172.16.56.45:27017")
+	clientOptions := options.Client().ApplyURI("mongodb://root:12345@localhost:27017")
 	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
 		return nil, err

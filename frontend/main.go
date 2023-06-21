@@ -10,8 +10,9 @@ import (
 	"net/http"
 	"github.com/gorilla/mux"
 	"html/template"
-	
 	"io/ioutil"
+
+	"./handlers"
 )
 
 type Disciplina struct {
@@ -35,16 +36,16 @@ type Professor struct {
 
 
 func main() {
+	router := mux.NewRouter()	
 
-	router := mux.NewRouter()
-	
 	// Roteamento para arquivos estáticos
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
-	router.HandleFunc("/", homeHandler).Methods("GET")
+	router.HandleFunc("/", handlers.Home).Methods("GET")
 	router.HandleFunc("/disciplinas", disciplinasHandler).Methods("GET")
 	router.HandleFunc("/visualizar-disciplinas", visualizarDisciplinasHandler).Methods("GET") // Nova rota para visualizar disciplinas 
-	router.HandleFunc("/visualizar-professores", visualizarProfessoresHandler).Methods("GET") // Nova rota para visualizar disciplinas 
+	router.HandleFunc("/visualizar-professores", visualizarProfessoresHandler).Methods("GET") // Nova rota para visualizar professores 
+	router.HandleFunc("/visualizar-emprestimos", visualizarEmprestimosHandler).Methods("GET") // Nova rota para visualizar emprestimos 
 	router.HandleFunc("/emprestimos", emprestimosHandler).Methods("GET")
 	router.HandleFunc("/professores", professoresHandler).Methods("GET")
 	router.HandleFunc("/disciplinas", cadastrarDisciplinaHandler).Methods("POST")
@@ -55,29 +56,6 @@ func main() {
 
 	
 	log.Fatal(http.ListenAndServe(":8081", router))
-}
-
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		html := `
-			<!DOCTYPE html>
-			<html>
-			<head>
-				<title>Home</title>
-				<link rel="stylesheet" href="/static/style.css">
-			</head>
-			<body class="container">
-				<h1>Home</h1>
-				<div class="container">
-  				<a href="/disciplinas" class="button">Disciplinas</a>
-  				<a href="/emprestimos" class="button">Empréstimos</a>
-  				<a href="/professores" class="button">Professores</a>
-				</div>
-			</body>
-			</html>
-			`
-		fmt.Fprintf(w, html)
-	}
 }
 
 func disciplinasHandler(w http.ResponseWriter, r *http.Request) {
@@ -244,9 +222,13 @@ func cadastrarDisciplinaHandler(w http.ResponseWriter, r *http.Request) {
 
 			// Verificar a resposta do backend
 			if resp.StatusCode == http.StatusCreated {
-				fmt.Fprintf(w, "Disciplina cadastrada com sucesso")
+				mensagem := "Disciplina cadastrada com sucesso"
+				w.Header().Set("Content-Type", "text/html; charset=utf-8")
+				fmt.Fprintf(w, `<script>alert("%s");</script>`, mensagem)
 			} else {
-				http.Error(w, "Erro ao cadastrar a disciplina", http.StatusInternalServerError)
+				mensagem := "Erro ao cadastrar a disciplina"
+				w.Header().Set("Content-Type", "text/html; charset=utf-8")
+				fmt.Fprintf(w, `<script>alert("%s");</script>`, mensagem)
 				log.Println("Erro ao cadastrar a disciplina: status", resp.StatusCode) // Adiciona um log de erro
 			}
 	}
@@ -321,7 +303,7 @@ func visualizarDisciplinasHandler(w http.ResponseWriter, r *http.Request) {
 			</table>
 			<br>
 			<form action="/disciplinas" method="GET">
-				<input type="submit" value="Voltar">
+				<input class="button-form" type="submit" value="Voltar">
 			</form>
 		</body>
 		</html>
@@ -431,9 +413,12 @@ func cadastrarProfessorHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 
-type ProfessorResponse struct {
-	Data []Professor `json:"data"`
+type ProfessorData struct {
+	Key   string      `json:"Key"`
+	Value interface{} `json:"Value"`
 }
+
+type ProfessorResponse [][]ProfessorData
 
 func visualizarProfessoresHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
@@ -455,8 +440,8 @@ func visualizarProfessoresHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Processar os dados da resposta em formato JSON
-		var professorResponse ProfessorResponse
-		err = json.Unmarshal(body, &professorResponse)
+		var professores ProfessorResponse
+		err = json.Unmarshal(body, &professores)
 		if err != nil {
 			http.Error(w, "Erro ao processar os dados dos professores", http.StatusInternalServerError)
 			log.Println("Erro ao processar os dados dos professores:", err)
@@ -481,17 +466,17 @@ func visualizarProfessoresHandler(w http.ResponseWriter, r *http.Request) {
 					</tr>
 				</thead>
 				<tbody>
-					{{range .Data}}
+					{{range .}}
 					<tr>
-						<td>{{.CPF}}</td>
-						<td>{{.Nome}}</td>
+						<td>{{index . 1}}</td>
+						<td>{{index . 2}}</td>
 					</tr>
 					{{end}}
 				</tbody>
 			</table>
 			<br>
-			<form action="/" method="GET">
-				<input type="submit" value="Voltar">
+			<form action="/professores" method="GET">
+				<input class="button-form" type="submit" value="Voltar">
 			</form>
 		</body>
 		</html>
@@ -505,7 +490,7 @@ func visualizarProfessoresHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = tmpl.Execute(w, professorResponse)
+		err = tmpl.Execute(w, professores)
 		if err != nil {
 			http.Error(w, "Erro ao renderizar o HTML", http.StatusInternalServerError)
 			log.Println("Erro ao renderizar o HTML:", err)
@@ -513,7 +498,6 @@ func visualizarProfessoresHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-
 
 
 func cadastrarEmprestimoHandler(w http.ResponseWriter, r *http.Request) {
@@ -572,6 +556,100 @@ func cadastrarEmprestimoHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			http.Error(w, "Erro ao cadastrar o empréstimo", http.StatusInternalServerError)
 			log.Println("Erro ao cadastrar o empréstimo: status", resp.StatusCode) // Adiciona um log de erro
+		}
+	}
+}
+
+
+type EmprestimoData struct {
+	Key   string      `json:"Key"`
+	Value interface{} `json:"Value"`
+}
+
+type EmprestimoResponse [][]EmprestimoData
+
+
+func visualizarEmprestimosHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		// Fazer a solicitação HTTP GET para obter os dados dos empréstimos do backend
+		resp, err := http.Get("http://localhost:8080/emprestimos")
+		if err != nil {
+			http.Error(w, "Erro ao obter os dados dos empréstimos", http.StatusInternalServerError)
+			log.Println("Erro ao obter os dados dos empréstimos:", err)
+			return
+		}
+		defer resp.Body.Close()
+
+		// Ler a resposta do backend
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			http.Error(w, "Erro ao ler a resposta do backend", http.StatusInternalServerError)
+			log.Println("Erro ao ler a resposta do backend:", err)
+			return
+		}
+
+		// Processar os dados da resposta em formato JSON
+		var emprestimos [][]interface{}
+		err = json.Unmarshal(body, &emprestimos)
+		if err != nil {
+			http.Error(w, "Erro ao processar os dados dos empréstimos", http.StatusInternalServerError)
+			log.Println("Erro ao processar os dados dos empréstimos:", err)
+			return
+		}
+
+		// Exibir a página de visualização dos empréstimos
+		html := `
+		<!DOCTYPE html>
+		<html>
+		<head>
+			<title>Visualizar Empréstimos</title>
+			<link rel="stylesheet" href="/static/style.css">
+		</head>
+		<body>
+			<h1>Visualizar Empréstimos</h1>
+			<table class="form-tabela">
+				<thead>
+					<tr>
+						<th>Código</th>
+						<th>CPF Professor</th>
+						<th>Nome Professor</th>
+						<th>Horário Início</th>
+						<th>Horário Fim</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{range .}}
+					<tr>
+						<td>{{index . 0}}</td>
+						<td>{{index . 1}}</td>
+						<td>{{index . 2}}</td>
+						<td>{{index . 3}}</td>
+						<td>{{index . 4}}</td>
+					</tr>
+					{{end}}
+				</tbody>
+			</table>
+			<br>
+			<form action="/emprestimos" method="GET">
+				<input class="button-form" type="submit" value="Voltar">
+			</form>
+		</body>
+		</html>
+		`
+
+		// Renderizar o HTML substituindo os dados dos empréstimos
+		tmpl, err := template.New("visualizar_emprestimos").Parse(html)
+		if err != nil {
+			http.Error(w, "Erro ao renderizar o HTML", http.StatusInternalServerError)
+			log.Println("Erro ao renderizar o HTML:", err)
+			return
+		}
+
+		err = tmpl.Execute(w, emprestimos)
+		if err != nil {
+			http.Error(w, "Erro ao renderizar o HTML", http.StatusInternalServerError)
+			log.Println("Erro ao renderizar o HTML:", err)
+			return
 		}
 	}
 }
