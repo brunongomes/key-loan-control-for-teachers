@@ -32,7 +32,7 @@ go run src/router/router.go
 Para executar o frontend, utilize o seguinte comando:
 
 ```
-go run src/web/home.go
+go run frontend/main.go
 ```
 
 ## Rotas disponíveis 🛣️
