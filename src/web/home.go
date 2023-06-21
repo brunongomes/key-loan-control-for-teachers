@@ -37,6 +37,7 @@ type Professor struct {
 func main() {
 
 	router := mux.NewRouter()
+	
 	// Roteamento para arquivos estáticos
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
@@ -50,6 +51,9 @@ func main() {
 	router.HandleFunc("/professores", cadastrarProfessorHandler).Methods("POST")
 	router.HandleFunc("/emprestimos", cadastrarEmprestimoHandler).Methods("POST")
 
+	router.HandleFunc("/deletar-disciplina/{codigo}", deletarDisciplinaHandler).Methods("DELETE")
+
+	
 	log.Fatal(http.ListenAndServe(":8081", router))
 }
 
@@ -96,17 +100,17 @@ func disciplinasHandler(w http.ResponseWriter, r *http.Request) {
 					<input type="text" id="nome" name="nome"><br><br>
 					<label for="cargaHoraria">Carga Horária:</label><br>
 					<input type="text" id="cargaHoraria" name="cargaHoraria"><br><br>
-					<input type="submit" value="Cadastrar">
-				</form>
-				<br>
-				<form action="/" method="GET">
-					<input type="submit" value="Voltar">
-				</form>
-				<br>
-				<form action="/visualizar-disciplinas" method="GET">
-					<input type="submit" value="Visualizar">
+					<input class="button-form" type="submit" value="Cadastrar">
 				</form>
 			</div>
+			<br>
+			<form action="/" method="GET">
+				<input class="button-form" type="submit" value="Voltar">
+			</form>
+			<br>
+			<form action="/visualizar-disciplinas" method="GET">
+				<input class="button-form" type="submit" value="Visualizar">
+			</form>
 		</body>
 		</html>
 			`
@@ -124,7 +128,7 @@ func emprestimosHandler(w http.ResponseWriter, r *http.Request) {
 			<title>Cadastrar Disciplina</title>
 			<link rel="stylesheet" href="/static/style.css">
 		</head>
-		<body>
+		<body class="container" >
 			<h1>Cadastrar Empréstimos</h1>
 			<div class="form-container">
 				<form action="/emprestimos" method="POST">
@@ -138,17 +142,17 @@ func emprestimosHandler(w http.ResponseWriter, r *http.Request) {
 					<input type="text" id="horarioInicio" name="horarioInicio"><br><br>
 					<label for="horarioFim">Horário início:</label><br>
 					<input type="text" id="horarioFim" name="horarioFim"><br><br>
-					<input type="submit" value="Cadastrar">
+					<input class="button-form" type="submit" value="Cadastrar">
 				</form>
+				</div>
 				<br>
 				<form action="/" method="GET">
-					<input type="submit" value="Voltar">
+					<input class="button-form" type="submit" value="Voltar">
 				</form>
 				<br>
 				<form action="/visualizar-emprestimos" method="GET">
-					<input type="submit" value="Visualizar">
+					<input class="button-form" type="submit" value="Visualizar">
 				</form>
-			</div>
 		</body>
 		</html>
 			`
@@ -166,7 +170,7 @@ func professoresHandler(w http.ResponseWriter, r *http.Request) {
 			<title>Cadastrar Professor</title>
 			<link rel="stylesheet" href="/static/style.css">
 		</head>
-		<body>
+		<body class="container" >
 			<h1>Cadastrar Professor</h1>
 			<div class="form-container">
 				<form action="/professores" method="POST">
@@ -174,17 +178,17 @@ func professoresHandler(w http.ResponseWriter, r *http.Request) {
 					<input type="text" id="cpf" name="cpf"><br><br>
 					<label for="nome">Nome:</label><br>
 					<input type="text" id="nome" name="nome"><br><br>
-					<input type="submit" value="Cadastrar">
+					<input class="button-form" type="submit" value="Cadastrar">
 				</form>
+				</div>
 				<br>
 				<form action="/" method="GET">
-					<input type="submit" value="Voltar">
+					<input class="button-form" type="submit" value="Voltar">
 				</form>
 				<br>
 				<form action="/visualizar-professores" method="GET">
-					<input type="submit" value="Visualizar">
+					<input class="button-form" type="submit" value="Visualizar">
 				</form>
-			</div>
 		</body>
 		</html>
 			`
@@ -336,6 +340,43 @@ func visualizarDisciplinasHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Erro ao renderizar o HTML", http.StatusInternalServerError)
 			log.Println("Erro ao renderizar o HTML:", err)
 			return
+		}
+	}
+}
+
+func deletarDisciplinaHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "DELETE" {
+		vars := mux.Vars(r)
+		codigo := vars["codigo"]
+
+		// Montar a URL para a solicitação HTTP DELETE
+		url := "http://localhost:8080/disciplinas/" + codigo
+
+		// Criar a solicitação HTTP DELETE
+		req, err := http.NewRequest("DELETE", url, nil)
+		if err != nil {
+			http.Error(w, "Erro ao criar a solicitação HTTP", http.StatusInternalServerError)
+			log.Println("Erro ao criar a solicitação HTTP:", err)
+			return
+		}
+
+		// Enviar a solicitação HTTP DELETE para o backend
+		client := http.DefaultClient
+		resp, err := client.Do(req)
+		if err != nil {
+			http.Error(w, "Erro ao enviar a solicitação HTTP para o backend", http.StatusInternalServerError)
+			log.Println("Erro ao enviar a solicitação HTTP para o backend:", err)
+			return
+		}
+		defer resp.Body.Close()
+
+		// Verificar a resposta do backend
+		if resp.StatusCode == http.StatusOK {
+			// Redirecionar de volta para a página de visualização das disciplinas
+			http.Redirect(w, r, "/visualizar-disciplinas", http.StatusSeeOther)
+		} else {
+			http.Error(w, "Erro ao deletar a disciplina", http.StatusInternalServerError)
+			log.Println("Erro ao deletar a disciplina: status", resp.StatusCode)
 		}
 	}
 }
