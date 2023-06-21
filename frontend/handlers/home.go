@@ -15,7 +15,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 				<link rel="stylesheet" href="/static/style.css">
 			</head>
 			<body class="container">
-				<h1>Home</h1>
+				<h1>Controle de empréstimo de chaves</h1>
 				<div class="container">
   				<a href="/disciplinas" class="button">Disciplinas</a>
   				<a href="/emprestimos" class="button">Empréstimos</a>
