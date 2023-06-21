@@ -191,8 +191,8 @@ func VisualizarEmprestimosHandler(w http.ResponseWriter, r *http.Request) {
 						<td>{{index . 2}}</td>
 						<td>{{index . 3}}</td>
 						<td>{{index . 4}}</td>
-						<td><a href="/atualizar-disciplina?codigo={{index . 1}}">Atualizar</a></td>
-						<td><a href="/disciplinas?codigo={{index . 1}}">Deletar</a></td>
+						<td><a class="button-update" href="/atualizar-disciplina?codigo={{index . 1}}">Atualizar</a></td>
+						<td><a class="button-delete" href="/disciplinas?codigo={{index . 1}}">Deletar</a></td>
 					</tr>
 					{{end}}
 				</tbody>

@@ -179,8 +179,8 @@ func VisualizarDisciplinasHandler(w http.ResponseWriter, r *http.Request) {
 						<td>{{index . 1}}</td>
 						<td>{{index . 2}}</td>
 						<td>{{index . 3}}</td>
-						<td><a href="/atualizar-disciplina?codigo={{index . 1}}">Atualizar</a></td>
-						<td><a href="/deletar-disciplina?codigo={{index . 1}}">Deletar</a></td>
+						<td><a class="button-update" href="/atualizar-disciplina?codigo={{index . 1}}">Atualizar</a></td>
+						<td><a class="button-delete" href="/deletar-disciplina?codigo={{index . 1}}">Deletar</a></td>
 					</tr>
 					{{end}}
 				</tbody>
