@@ -98,10 +98,15 @@ func CadastrarProfessorHandler(w http.ResponseWriter, r *http.Request) {
 
 		// Verificar a resposta do backend
 		if resp.StatusCode == http.StatusCreated {
-			fmt.Fprintf(w, "Professor cadastrado com sucesso")
+			mensagem := "Professor cadastrado com sucesso"
+			html := fmt.Sprintf(`<script>alert("%s"); window.location.href = "/professores";</script>`, mensagem)
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			fmt.Fprintf(w, html)
 		} else {
-			http.Error(w, "Erro ao cadastrar o professor", http.StatusInternalServerError)
-			log.Println("Erro ao cadastrar o professor: status", resp.StatusCode) // Adiciona um log de erro
+			mensagem := "Erro ao cadastrar a professor"
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			fmt.Fprintf(w, `<script>alert("%s");</script>`, mensagem)
+			log.Println("Erro ao cadastrar a professor: status", resp.StatusCode) // Adiciona um log de erro
 		}
 	}
 }
