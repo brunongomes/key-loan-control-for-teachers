@@ -113,8 +113,9 @@ func CadastrarDisciplinaHandler(w http.ResponseWriter, r *http.Request) {
 			// Verificar a resposta do backend
 			if resp.StatusCode == http.StatusCreated {
 				mensagem := "Disciplina cadastrada com sucesso"
+				html := fmt.Sprintf(`<script>alert("%s"); window.location.href = "/disciplinas";</script>`, mensagem)
 				w.Header().Set("Content-Type", "text/html; charset=utf-8")
-				fmt.Fprintf(w, `<script>alert("%s");</script>`, mensagem)
+				fmt.Fprintf(w, html)
 			} else {
 				mensagem := "Erro ao cadastrar a disciplina"
 				w.Header().Set("Content-Type", "text/html; charset=utf-8")

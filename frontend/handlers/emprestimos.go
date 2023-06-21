@@ -120,10 +120,15 @@ func CadastrarEmprestimoHandler(w http.ResponseWriter, r *http.Request) {
 
 		// Verificar a resposta do backend
 		if resp.StatusCode == http.StatusCreated {
-			fmt.Fprintf(w, "Empréstimo cadastrado com sucesso")
+			mensagem := "Empréstimo cadastrado com sucesso"
+			html := fmt.Sprintf(`<script>alert("%s"); window.location.href = "/emprestimos";</script>`, mensagem)
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			fmt.Fprintf(w, html)
 		} else {
-			http.Error(w, "Erro ao cadastrar o empréstimo", http.StatusInternalServerError)
-			log.Println("Erro ao cadastrar o empréstimo: status", resp.StatusCode) // Adiciona um log de erro
+			mensagem := "Erro ao cadastrar a empréstimo"
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			fmt.Fprintf(w, `<script>alert("%s");</script>`, mensagem)
+			log.Println("Erro ao cadastrar a empréstimo: status", resp.StatusCode) // Adiciona um log de erro
 		}
 	}
 }
