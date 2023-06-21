@@ -24,7 +24,7 @@ go mod download
 Para executar o backend, utilize o seguinte comando:
 
 ```
-go run src/router/router.go
+go run src/main.go
 ```
 
 ### Frontend
