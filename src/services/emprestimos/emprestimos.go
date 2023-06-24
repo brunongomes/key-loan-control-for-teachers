@@ -110,7 +110,7 @@ func ListarEmprestimos() {
         Nome_Professor := dados[2]
         Horario_inicio := dados[3]
         Horario_fim := dados[4]
-        fmt.Printf("%s\t%s\t%s\t\t%s\t\t%s\n", codigo, CPF_Professor, Nome_Professor, Horario_inicio, Horario_fim)
+        fmt.Printf("%s\t%s\t\t%s\t\t%s\t\t%s\n", codigo, CPF_Professor, Nome_Professor, Horario_inicio, Horario_fim)
     }
     fmt.Println("----------------------------------- \n")
 }
