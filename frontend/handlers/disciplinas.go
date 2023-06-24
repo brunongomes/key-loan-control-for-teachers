@@ -10,7 +10,6 @@ import (
 	"encoding/json"
 	"html/template"
 	"io/ioutil"
-	"github.com/gorilla/mux"
 )
 
 type Disciplina struct {

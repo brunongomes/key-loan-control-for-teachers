@@ -10,7 +10,6 @@ func SetupRoutes(router *mux.Router) {
 	router.HandleFunc("/disciplinas", handlers.DisciplinasHandler).Methods("GET")
 	router.HandleFunc("/disciplinas", handlers.CadastrarDisciplinaHandler).Methods("POST")
 	router.HandleFunc("/visualizar-disciplinas", handlers.VisualizarDisciplinasHandler).Methods("GET")
-	router.HandleFunc("/deletar-disciplina/{codigo}", handlers.DeletarDisciplinaHandler).Methods("DELETE")
 
 	router.HandleFunc("/professores", handlers.ProfessoresHandler).Methods("GET")
 	router.HandleFunc("/professores", handlers.CadastrarProfessorHandler).Methods("POST")
