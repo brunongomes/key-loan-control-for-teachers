@@ -1,13 +1,16 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"os"
-	"./services/disciplinas"
-	"./services/professores"
-	"./services/emprestimos"
 	"path/filepath"
+	"strconv"
+
+	"./services/disciplinas"
+	"./services/emprestimos"
+	"./services/professores"
 )
 
 func main() {
@@ -72,25 +75,38 @@ func main() {
 }
 
 func cadastrarDisciplina() {
+	scanner := bufio.NewScanner(os.Stdin)
+
 	fmt.Println("Digite o código da disciplina:")
-	var codigo string
-	fmt.Scanln(&codigo)
+	scanner.Scan()
+	codigo := scanner.Text()
+
 	fmt.Println("Digite o nome da disciplina:")
-	var nome string
-	fmt.Scanln(&nome)
+	scanner.Scan()
+	nome := scanner.Text()
+
 	fmt.Println("Digite a carga horária da disciplina:")
-	var cargaHoraria int
-	fmt.Scanln(&cargaHoraria)
-	err := disciplinas.CadastrarDisciplina(codigo, nome, cargaHoraria)
+	scanner.Scan()
+	cargaHorariaStr := scanner.Text()
+	cargaHoraria, err := strconv.Atoi(cargaHorariaStr)
+	if err != nil {
+		log.Println("Erro ao converter carga horária:", err)
+		return
+	}
+
+	err = disciplinas.CadastrarDisciplina(codigo, nome, cargaHoraria)
 	if err != nil {
 		log.Println("Erro ao cadastrar disciplina:", err)
 	}
 }
 
 func excluirDisciplina() {
+	scanner := bufio.NewScanner(os.Stdin)
+
 	fmt.Println("Digite o código da disciplina a ser excluída:")
-	var codigo string
-	fmt.Scanln(&codigo)
+	scanner.Scan()
+	codigo := scanner.Text()
+
 	err := disciplinas.ExcluirDisciplina(codigo)
 	if err != nil {
 		log.Println("Erro ao excluir disciplina:", err)
@@ -98,9 +114,12 @@ func excluirDisciplina() {
 }
 
 func atualizarDisciplina() {
+	scanner := bufio.NewScanner(os.Stdin)
+
 	fmt.Println("Digite o código da disciplina que será atualizada:")
-	var codigo string
-	fmt.Scanln(&codigo)
+	scanner.Scan()
+	codigo := scanner.Text()
+
 	err := disciplinas.AtualizarDisciplina(codigo)
 	if err != nil {
 		log.Println("Erro ao atualizar disciplina:", err)
@@ -108,12 +127,16 @@ func atualizarDisciplina() {
 }
 
 func cadastrarProfessor() {
+	scanner := bufio.NewScanner(os.Stdin)
+
 	fmt.Println("Digite o CPF do professor:")
-	var cpfProfessor string
-	fmt.Scanln(&cpfProfessor)
+	scanner.Scan()
+	cpfProfessor := scanner.Text()
+
 	fmt.Println("Digite o nome do professor:")
-	var nomeProfessor string
-	fmt.Scanln(&nomeProfessor)
+	scanner.Scan()
+	nomeProfessor := scanner.Text()
+
 	err := professores.CadastrarProfessor(cpfProfessor, nomeProfessor)
 	if err != nil {
 		log.Println("Erro ao cadastrar professor:", err)
@@ -121,9 +144,12 @@ func cadastrarProfessor() {
 }
 
 func excluirProfessor() {
-	fmt.Println("Digite o cpf do professor para exclusão:")
-	var cpfProfessor string
-	fmt.Scanln(&cpfProfessor)
+	scanner := bufio.NewScanner(os.Stdin)
+
+	fmt.Println("Digite o CPF do professor para exclusão:")
+	scanner.Scan()
+	cpfProfessor := scanner.Text()
+
 	err := professores.ExcluirProfessor(cpfProfessor)
 	if err != nil {
 		log.Println("Erro ao excluir professor:", err)
@@ -131,9 +157,12 @@ func excluirProfessor() {
 }
 
 func atualizarProfessor() {
-	fmt.Println("Digite o cpf do professor que será atualizado:")
-	var cpf string
-	fmt.Scanln(&cpf)
+	scanner := bufio.NewScanner(os.Stdin)
+
+	fmt.Println("Digite o CPF do professor que será atualizado:")
+	scanner.Scan()
+	cpf := scanner.Text()
+
 	err := professores.AtualizarProfessor(cpf)
 	if err != nil {
 		log.Println("Erro ao atualizar disciplina:", err)
@@ -141,31 +170,46 @@ func atualizarProfessor() {
 }
 
 func cadastrarEmprestimo() {
+	scanner := bufio.NewScanner(os.Stdin)
+
 	fmt.Println("Digite o código do empréstimo")
-	var codigo int
-	fmt.Scanln(&codigo)
-	fmt.Println("Digite o CPF do professor:")
-	var cpfProfessor string
-	fmt.Scanln(&cpfProfessor)
-	fmt.Println("Digite o nome do professor:")
-	var nomeProfessor string
-	fmt.Scanln(&nomeProfessor)
-	fmt.Println("Digite o horario que o professor pegou a chave: (Utilize o formato HH:MM)")
-	var horarioInicio string
-	fmt.Scanln(&horarioInicio)
-	fmt.Println("Digite o horario que o professor devolveu a chave: (Utilize o formato HH:MM)")
-	var horarioFim string
-	fmt.Scanln(&horarioFim)
-	err := emprestimos.CadastrarEmprestimo(codigo, cpfProfessor, nomeProfessor, horarioInicio, horarioFim)
+	scanner.Scan()
+	codigoStr := scanner.Text()
+	codigo, err := strconv.Atoi(codigoStr)
 	if err != nil {
-		log.Println("Erro ao cadastrar professor:", err)
+		log.Println("Erro ao converter código de empréstimo:", err)
+		return
+	}
+
+	fmt.Println("Digite o CPF do professor:")
+	scanner.Scan()
+	cpfProfessor := scanner.Text()
+
+	fmt.Println("Digite o nome do professor:")
+	scanner.Scan()
+	nomeProfessor := scanner.Text()
+
+	fmt.Println("Digite o horário que o professor pegou a chave: (Utilize o formato HH:MM)")
+	scanner.Scan()
+	horarioInicio := scanner.Text()
+
+	fmt.Println("Digite o horário que o professor devolveu a chave: (Utilize o formato HH:MM)")
+	scanner.Scan()
+	horarioFim := scanner.Text()
+
+	err = emprestimos.CadastrarEmprestimo(codigo, cpfProfessor, nomeProfessor, horarioInicio, horarioFim)
+	if err != nil {
+		log.Println("Erro ao cadastrar empréstimo:", err)
 	}
 }
 
 func excluirEmprestimo() {
+	scanner := bufio.NewScanner(os.Stdin)
+
 	fmt.Println("Digite o código do empréstimo a ser excluído:")
-	var codigo string
-	fmt.Scanln(&codigo)
+	scanner.Scan()
+	codigo := scanner.Text()
+
 	err := emprestimos.ExcluirEmprestimos(codigo)
 	if err != nil {
 		log.Println("Erro ao excluir empréstimo:", err)
@@ -173,10 +217,18 @@ func excluirEmprestimo() {
 }
 
 func atualizarEmprestimo() {
+	scanner := bufio.NewScanner(os.Stdin)
+
 	fmt.Println("Digite o código do empréstimo que será atualizado:")
-	var codigo int
-	fmt.Scanln(&codigo)
-	err := emprestimos.AtualizarEmprestimo(codigo)
+	scanner.Scan()
+	codigoStr := scanner.Text()
+	codigo, err := strconv.Atoi(codigoStr)
+	if err != nil {
+		log.Println("Erro ao converter código de empréstimo:", err)
+		return
+	}
+
+	err = emprestimos.AtualizarEmprestimo(codigo)
 	if err != nil {
 		log.Println("Erro ao atualizar empréstimo:", err)
 	}
