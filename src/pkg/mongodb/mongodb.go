@@ -29,7 +29,7 @@ func ConnectToMongoDB() (*MongoDB, error) {
 }
 
 func (db *MongoDB) Insert(collectionName string, data interface{}) error {
-	collection := db.Client.Database("meu_banco_de_dados").Collection(collectionName)
+	collection := db.Client.Database("key_loan").Collection(collectionName)
 	_, err := collection.InsertOne(context.Background(), data)
 	if err != nil {
 		return err
@@ -38,7 +38,7 @@ func (db *MongoDB) Insert(collectionName string, data interface{}) error {
 }
 
 func (db *MongoDB) Read(collectionName string, filter bson.M) ([]interface{}, error) {
-	collection := db.Client.Database("meu_banco_de_dados").Collection(collectionName)
+	collection := db.Client.Database("key_loan").Collection(collectionName)
 	cursor, err := collection.Find(context.Background(), filter)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (db *MongoDB) Read(collectionName string, filter bson.M) ([]interface{}, er
 }
 
 func (db *MongoDB) Update(collectionName string, filter bson.M, update bson.M) error {
-	collection := db.Client.Database("meu_banco_de_dados").Collection(collectionName)
+	collection := db.Client.Database("key_loan").Collection(collectionName)
 	_, err := collection.UpdateOne(context.Background(), filter, update)
 	if err != nil {
 		return err
@@ -71,7 +71,7 @@ func (db *MongoDB) Update(collectionName string, filter bson.M, update bson.M) e
 }
 
 func (db *MongoDB) Delete(collectionName string, filter bson.M) error {
-	collection := db.Client.Database("meu_banco_de_dados").Collection(collectionName)
+	collection := db.Client.Database("key_loan").Collection(collectionName)
 	_, err := collection.DeleteOne(context.Background(), filter)
 	if err != nil {
 		return err
