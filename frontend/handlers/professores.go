@@ -44,14 +44,10 @@ func ProfessoresHandler(w http.ResponseWriter, r *http.Request) {
 					<input class="button-form" type="submit" value="Cadastrar">
 				</form>
 				</div>
-				<br>
-				<form action="/" method="GET">
-					<input class="button-form" type="submit" value="Voltar">
-				</form>
-				<br>
-				<form action="/visualizar-professores" method="GET">
-					<input class="button-form" type="submit" value="Visualizar">
-				</form>
+				<div class="btn"> 
+					<a href="/visualizar-professores" class="button-form" method="GET" >Visualizar</a>
+					<a href="/" class="button-form" method="GET" >Voltar</a>
+				</div>
 		</body>
 		</html>
 			`
