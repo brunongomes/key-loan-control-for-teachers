@@ -13,7 +13,6 @@ func SetupRoutes(router *mux.Router) {
 	router.HandleFunc("/atualizar-disciplina", handlers.AtualizarDisciplinaHandler).Methods("POST")
 	router.HandleFunc("/deletar-disciplina", handlers.DeletarDisciplinaHandler).Methods("GET")
 
-
 	router.HandleFunc("/professores", handlers.ProfessoresHandler).Methods("GET")
 	router.HandleFunc("/professores", handlers.CadastrarProfessorHandler).Methods("POST")
 	router.HandleFunc("/visualizar-professores", handlers.VisualizarProfessoresHandler).Methods("GET")
