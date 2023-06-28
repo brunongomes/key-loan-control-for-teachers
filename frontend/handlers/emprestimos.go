@@ -217,3 +217,32 @@ func VisualizarEmprestimosHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
+func DeletarEmprestimosHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		codigo := r.FormValue("codigo")
+
+		// Exibir a página de confirmação de exclusão da professor
+		html := fmt.Sprintf(`
+			<!DOCTYPE html>
+			<html>
+			<head>
+				<title>Deletar Emprestimo</title>
+				<link rel="stylesheet" href="/static/style.css">
+			</head>
+			<body class="container">
+				<h1>Deletar Emprestimo</h1>
+				<p>Deseja realmente deletar a emprestimo?</p>
+				<form action="/emprestimos/%s" method="POST">
+					<input class="button-delete" type="submit" value="Deletar">
+				</form>
+				<br>
+				<form action="/visualizar-emprestimos" method="GET">
+					<input class="button-form" type="submit" value="Cancelar">
+				</form>
+			</body>
+			</html>
+		`, codigo)
+		fmt.Fprintf(w, html)
+	}
+}
