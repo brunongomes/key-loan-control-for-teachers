@@ -16,6 +16,7 @@ func SetupRoutes(router *mux.Router) {
 	router.HandleFunc("/professores", handlers.ProfessoresHandler).Methods("GET")
 	router.HandleFunc("/professores", handlers.CadastrarProfessorHandler).Methods("POST")
 	router.HandleFunc("/visualizar-professores", handlers.VisualizarProfessoresHandler).Methods("GET")
+	router.HandleFunc("/deletar-professor", handlers.DeletarProfessoresHandler).Methods("GET")
 	
 	router.HandleFunc("/emprestimos", handlers.EmprestimosHandler).Methods("GET")
 	router.HandleFunc("/emprestimos", handlers.CadastrarEmprestimoHandler).Methods("POST")
