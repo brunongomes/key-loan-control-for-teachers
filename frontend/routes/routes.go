@@ -5,6 +5,7 @@ import (
 	"../handlers"
 	"../templates/disciplinas"
 	"../templates/professores"
+	"../templates/emprestimos"
 )
 
 func SetupRoutes(router *mux.Router) {
@@ -21,6 +22,6 @@ func SetupRoutes(router *mux.Router) {
 	router.HandleFunc("/deletar-professor", handlers.DeletarProfessoresHandler).Methods("GET")
 	
 	router.HandleFunc("/emprestimos", handlers.EmprestimosHandler).Methods("GET")
-	router.HandleFunc("/emprestimos", handlers.CadastrarEmprestimoHandler).Methods("POST")
+	router.HandleFunc("/emprestimos", emprestimos.Insert).Methods("POST")
 	router.HandleFunc("/visualizar-emprestimos", handlers.VisualizarEmprestimosHandler).Methods("GET")
 }
