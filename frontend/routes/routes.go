@@ -3,12 +3,13 @@ package routes
 import (
 	"github.com/gorilla/mux"
 	"../handlers"
+	"../templates/disciplinas"
 )
 
 func SetupRoutes(router *mux.Router) {
 	router.HandleFunc("/", handlers.HomeHandler).Methods("GET")
 	router.HandleFunc("/disciplinas", handlers.DisciplinasHandler).Methods("GET")
-	router.HandleFunc("/disciplinas", handlers.CadastrarDisciplinaHandler).Methods("POST")
+	router.HandleFunc("/disciplinas", disciplinas.Insert).Methods("POST")
 	router.HandleFunc("/visualizar-disciplinas", handlers.VisualizarDisciplinasHandler).Methods("GET")
 	router.HandleFunc("/atualizar-disciplina", handlers.AtualizarDisciplinaHandler).Methods("POST")
 	router.HandleFunc("/deletar-disciplina", handlers.DeletarDisciplinaHandler).Methods("GET")
