@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/mux"
 	"../handlers"
 	"../templates/disciplinas"
+	"../templates/professores"
 )
 
 func SetupRoutes(router *mux.Router) {
@@ -15,7 +16,7 @@ func SetupRoutes(router *mux.Router) {
 	router.HandleFunc("/deletar-disciplina", handlers.DeletarDisciplinaHandler).Methods("GET")
 
 	router.HandleFunc("/professores", handlers.ProfessoresHandler).Methods("GET")
-	router.HandleFunc("/professores", handlers.CadastrarProfessorHandler).Methods("POST")
+	router.HandleFunc("/professores", professores.Insert).Methods("POST")
 	router.HandleFunc("/visualizar-professores", handlers.VisualizarProfessoresHandler).Methods("GET")
 	router.HandleFunc("/deletar-professor", handlers.DeletarProfessoresHandler).Methods("GET")
 	
