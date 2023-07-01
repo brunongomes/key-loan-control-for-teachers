@@ -20,5 +20,5 @@ func SetupRoutes(router *mux.Router) {
 	
 	router.HandleFunc("/emprestimos", handlers.EmprestimosHandler).Methods("GET")
 	router.HandleFunc("/emprestimos", emprestimos.Insert).Methods("POST")
-	router.HandleFunc("/visualizar-emprestimos", handlers.VisualizarEmprestimosHandler).Methods("GET")
+	router.HandleFunc("/visualizar-emprestimos", emprestimos.Read).Methods("GET")
 }
