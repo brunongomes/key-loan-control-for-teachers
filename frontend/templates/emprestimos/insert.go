@@ -8,6 +8,8 @@ import (
 	"bytes"
 	"log"
 	"encoding/json"
+
+	"../../models"
 )
 
 func Insert(w http.ResponseWriter, r *http.Request) {
@@ -35,7 +37,7 @@ func Insert(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Criar a estrutura de dados para o empréstimo
-		emprestimo := Emprestimo{
+		emprestimo := models.Emprestimo{
 			Codigo:         codigo,
 			CPF_Professor:  cpfProfessor,
 			Nome_Professor: nomeProfessor,

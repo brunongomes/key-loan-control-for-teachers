@@ -1,4 +1,4 @@
-package emprestimos
+package models
 
 type Emprestimo struct {
 	Codigo         int    `json:"codigo"`
