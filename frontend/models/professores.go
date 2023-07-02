@@ -1,4 +1,4 @@
-package professores
+package models
 
 type Professor struct {
 	CPF  string `json:"cpf"`

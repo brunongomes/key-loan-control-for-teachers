@@ -7,6 +7,8 @@ import (
 	"bytes"
 	"log"
 	"encoding/json"
+
+	"../../models"
 )
 
 func Insert(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +26,7 @@ func Insert(w http.ResponseWriter, r *http.Request) {
 		// Validar os dados do formulário (opcional)
 
 		// Criar a estrutura de dados para o professor
-		professor := Professor{
+		professor := models.Professor{
 			CPF:  cpf,
 			Nome: nome,
 		}
