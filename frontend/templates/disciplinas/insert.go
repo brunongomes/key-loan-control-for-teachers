@@ -8,6 +8,8 @@ import (
 	"bytes"
 	"log"
 	"encoding/json"
+
+	"../../models"
 )
 
 func Insert(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +35,7 @@ func Insert(w http.ResponseWriter, r *http.Request) {
 			}
 
 			// Criar a estrutura de dados para a disciplina
-			disciplina := Disciplina{
+			disciplina := models.Disciplina{
 				Codigo:       codigo,
 				Nome:         nome,
 				CargaHoraria: cargaHoraria,

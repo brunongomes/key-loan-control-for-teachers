@@ -1,4 +1,4 @@
-package disciplinas
+package models
 
 type Disciplina struct {
 	Codigo       string `json:"codigo"`
