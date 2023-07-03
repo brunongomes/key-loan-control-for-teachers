@@ -1,11 +1,11 @@
-package handlers
+package home
 
 import (
 	"fmt"
 	"net/http"
 )
 
-func HomeHandler(w http.ResponseWriter, r *http.Request) {
+func Home(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		html := `
 			<!DOCTYPE html>

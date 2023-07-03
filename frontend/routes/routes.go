@@ -6,10 +6,11 @@ import (
 	"../templates/disciplinas"
 	"../templates/professores"
 	"../templates/emprestimos"
+	"../templates/home"
 )
 
 func SetupRoutes(router *mux.Router) {
-	router.HandleFunc("/", handlers.HomeHandler).Methods("GET")
+	router.HandleFunc("/", home.Home).Methods("GET")
 	router.HandleFunc("/disciplinas", handlers.DisciplinasHandler).Methods("GET")
 	router.HandleFunc("/disciplinas", disciplinas.Insert).Methods("POST")
 	router.HandleFunc("/visualizar-disciplinas", disciplinas.Read).Methods("GET")
