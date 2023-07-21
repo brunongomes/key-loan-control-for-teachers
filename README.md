@@ -125,3 +125,4 @@ The application offers the following routes:
 - **Update a loan**: `PUT /loans/{code}`
 
 Feel free to use these routes to interact with the system and manage the information of teachers, subjects, and loans.
+
